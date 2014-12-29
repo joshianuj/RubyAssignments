@@ -11,7 +11,6 @@ def is_prime (num)
   end
   "is Prime"
 end
-
 print "Enter a number: "
 num = gets.chomp
 begin
