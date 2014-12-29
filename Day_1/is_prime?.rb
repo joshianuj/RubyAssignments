@@ -1,17 +1,15 @@
 # returns whether the number is prime or not
 
-def is_prime? num
-  if(num==2)
+def is_prime? (num)
+  if(num == 2)
     return "is Prime"
   end
 
   sqrt_num = Math.sqrt(num).ceil
-  (2..sqrt_num).each{
-    |x| if(num%x == 0)
-          return "is Composite"
-        end
-  }
-  return "is Prime"
+  (2..sqrt_num).each do |x|
+    return "is Composite" if (num%x == 0)
+  end
+  "is Prime"
 end
 
 print "Enter a number: "

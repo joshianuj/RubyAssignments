@@ -1,7 +1,7 @@
 
 # returns whether the given year is a leap year or not
 def leap_year? year
-  if((((year%4) == 0) && ((year%100) == 0) && ((year%400) == 0)) or (((year%4) == 0) && ((year%100) != 0)))
+  if(((year%400) == 0) || (((year%4) == 0) && ((year%100) != 0)))
     return "is a leap year"
 
   else

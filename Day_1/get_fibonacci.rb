@@ -1,8 +1,8 @@
 # returns the fibonacci of the given number
 
 def fibonacci num
-  if num==0
-    return 0
+  if num == 0
+    return [0]
   end
 
   fibo = Array.new()
@@ -11,13 +11,13 @@ def fibonacci num
   fibo << x
   fibo << y
 
-  (2...num).each do
+  (3..num).each do
     z = x + y
     x,y = y,z
     fibo << y
   end
 
-  return fibo
+  fibo
 
 end
 
