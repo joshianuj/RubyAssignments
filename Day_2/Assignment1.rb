@@ -3,11 +3,9 @@
 #puts [1,2,3].map{|a| a*2}
 
 def newMap(array)
-  n= 0
   op = []
-  while n<array.length
+  (0...array.length).each do |n|
     op[n] = yield array[n]
-    n+=1
   end
   op
 end
