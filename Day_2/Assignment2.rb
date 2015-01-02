@@ -41,9 +41,9 @@ def distribute (array,no_of_divs)
 # array to keep track of used elements
   used_elements = Array.new(1)
 
-  (1..array.length).each do # iterate through the whole array
-  |i| array.combination(i).each do # iterate through each combination
-    |j| if(is_equal_to?(j,avg,used_elements))
+  (1..array.length).each do |i| # iterate through the whole array
+    array.combination(i).each do  |j| # iterate through each combination
+        if(is_equal_to?(j,avg,used_elements))
           result << j
           j.each {|x| used_elements << x} #prepend in used_elements the elements of j
           used_elements = (used_elements.uniq).compact # make used_elements PURE
