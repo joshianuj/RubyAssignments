@@ -13,7 +13,7 @@ end
 
 class CardDeck
   SAMPLE_CARD_VALUE = [2,3,4,5,6,7,8,9,10,11,12,13,14]
-  SAMPLE_CARD_TYPE = ["Hearts","Spades","Diamond","Club"]
+  SAMPLE_CARD_TYPE = ["H","S","D","C"]
 
   attr_accessor :sample_card
 
@@ -67,7 +67,34 @@ class Game
 
   def display_cards
     (0...@players_array.length).each do |x|
-      puts "Player #{x+1} : #{(@players_array[x].player_cards).to_s}"
+      #puts "Player #{x+1} : #{(@players_array[x].player_cards).to_s}"
+      print "Player #{x+1} :"
+      (0...@players_array[x].player_cards.length).each do |y|
+        print"("
+        value = ((@players_array[x].player_cards[y]).to_a)[0][1]
+        #print value
+        if(value > 10)
+          if(value  == 11 )
+            print "J"
+          end
+          if(value == 12)
+            print "Q"
+          end
+          if(value == 13)
+            print "K"
+          end
+          if(value == 14)
+            print "A"
+          end
+        else
+          print value
+        end
+        print " "
+        print ((@players_array[x].player_cards[y]).to_a)[1][1]
+        print")"
+        print " "
+      end
+      puts ""
     end
   end
 
@@ -97,6 +124,11 @@ class Game
       card_types << temptypes
     end
 
+    #card_values = [[10,11,12],[2,7,2],[3,4,5]]
+    #card_types = [["Clubs","Clubs","Clubs"],["Hearts","Spades","Spades"],
+    # ["Hearts","Hearts",
+     #"Hearts"]]
+
     trials = check_trial(card_values)
     #trials = check_trial([[1,1,1],[2,2,2],[3,3,3],[5,5,5],[4,4,4]])
     if !(trials == false)
@@ -104,15 +136,52 @@ class Game
     end
 
     runs = check_run (card_values)
-    #runs =  check_run([[2,1,3],[4,5,6],[3,3,3],[5,5,5],[4,4,4]])
-    if !(runs == false)
-      return runs
+    color = check_color(card_types)
+
+    color_runs = []
+    color_no = []
+    if(!(runs==false)&&!(color==false))
+      (0...runs.length).each do |x|
+        (0..color.length).each do |y|
+          if(runs[x] == color[y])
+            color_runs << card_values[runs[x]]
+            color_no << runs[x]
+          end
+        end
+      end
+    end
+    if !(color_runs.length == 0)
+      winner = compare_values(color_runs)
+      winner = color_no[winner]
+      return winner
     end
 
-    color = check_color([["Hearts","Spades"]])
-    # color = check_color(card_values)
+    if !(runs == false)
+      largest = runs[0]
+      run_values = []
+      (0...card_values.length).each do |x|
+        (0...runs.length).each do |y|
+          if(x==runs[y])
+            run_values  << card_values[x]
+          end
+        end
+      end
+      output = compare_values(run_values)
+      return output
+    end
+
     if !(color == false)
-      return color
+      largest = color[0]
+      color_values = []
+      (0...card_values.length).each do |x|
+        (0...color.length).each do |y|
+          if(x==color[y])
+            color_values  << card_values[x]
+          end
+        end
+      end
+      output = compare_values(color_values)
+      return output
     end
 
     pairs = check_pair(card_values)
@@ -122,7 +191,7 @@ class Game
     end
 
     highestval = compare_values(card_values)
-    return highestval
+      return highestval
 
     #puts card_values.to_s
     #puts (compare_values(card_values)+1)
@@ -182,26 +251,53 @@ class Game
           end
         end
       end
-      #puts run_persons.to_s
-      if(run_persons.length == 1)
-        return run_persons[0]
-      elsif (run_persons.length > 0)
-        runcheckvals = []
-        (0...run_persons.length).each do |x|
-          runcheckvals << valuesoriginalip[run_persons[x]]
-        end
-        win = compare_values(runcheckvals)
-        (0...valuesoriginalip.length).each do |x|
-          if(valuesoriginalip[x] == runcheckvals[win])
-            return x
-          end
-        end
-      end
-      false
+    if(run_persons.length == 0)
+      return false
+    else
+      return run_persons
+    end
+      #puts color_persons.to_s
+      # if(run_persons.length == 1)
+      #   return run_persons[0]
+      # elsif (run_persons.length > 0)
+      #   runcheckvals = []
+      #   (0...run_persons.length).each do |x|
+      #     runcheckvals << valuesoriginalip[run_persons[x]]
+      #   end
+      #   win = compare_values(runcheckvals)
+      #   (0...valuesoriginalip.length).each do |x|
+      #     if(valuesoriginalip[x] == runcheckvals[win])
+      #       return x
+      #     end
+      #   end
+      # end
+      # false
   end
 
-  def check_color
-
+  def check_color valuesoriginalip
+    color_persons = []
+    (0...valuesoriginalip.length).each do |p|
+      check = true
+      i=0
+      values_original = valuesoriginalip.dup
+      #puts values_original.to_s
+      while check == true
+        if(values_original[p][i+1] == (values_original[p][i]))
+          i+=1
+          if(i==(values_original[p].length)-1)
+            color_persons << p
+            check = false
+          end
+        else
+          check = false
+        end
+      end
+    end
+    if(color_persons.length == 0)
+      return false
+    else
+      return color_persons
+    end
   end
 
   def check_pair valuesoriginal
@@ -242,7 +338,9 @@ class Game
     maxvalue = 0
     i=0
     values = valuesoriginal.dup
-
+    if(valuesoriginal.length == 1)
+      return 0
+    end
     check = false
     while(check==false)
       j=0
@@ -279,7 +377,7 @@ end
 
 puts "Enter no of players"
 #n = Integer(gets)
-g = Game.new 3
+g = Game.new 10
 g.createPlayers
 g.deal
 g.deal
