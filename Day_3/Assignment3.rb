@@ -86,7 +86,7 @@ class Game
         temptypes << (@players_array[i].player_cards[j].to_a)[1][1]
         #trial --
         #double run
-        #run
+        #run --
         #color
         #pair --
         #none
@@ -100,22 +100,29 @@ class Game
     trials = check_trial(card_values)
     #trials = check_trial([[1,1,1],[2,2,2],[3,3,3],[5,5,5],[4,4,4]])
     if !(trials == false)
-      #return trials
+      return trials
     end
 
-    runs =  check_run([[2,1,3],[2,2,2],[3,3,3],[5,5,5],[4,4,4]])
+    runs = check_run (card_values)
+    #runs =  check_run([[2,1,3],[4,5,6],[3,3,3],[5,5,5],[4,4,4]])
     if !(runs == false)
-      return 5
+      return runs
+    end
+
+    color = check_color([["Hearts","Spades"]])
+    # color = check_color(card_values)
+    if !(color == false)
+      return color
     end
 
     pairs = check_pair(card_values)
     #pairs = check_pair([[1,1,1],[2,6,5],[3,3,3],[7,7,5],[4,4,4]])
     if !(pairs == false)
-      #return pairs
+      return pairs
     end
 
     highestval = compare_values(card_values)
-    #return highestval
+    return highestval
 
     #puts card_values.to_s
     #puts (compare_values(card_values)+1)
@@ -161,12 +168,12 @@ class Game
       (0...valuesoriginalip.length).each do |p|
         check = true
         i=0
-        valuesoriginal = (valuesoriginalip[p].sort{|x,y| x<=> y}).dup
-        puts valuesoriginal.to_s
+        values_original = (valuesoriginalip[p].sort{|x,y| x<=> y}).dup
+        #puts values_original.to_s
         while check == true
-          if(valuesoriginal[p][i] == (valuesoriginal[p][i+1]+valuesoriginal[p][i]))
+          if(values_original[i+1] == (values_original[i]+1))
             i+=1
-            if(i==valuesoriginal[p].length-1)
+            if(i==(values_original.length)-1)
               run_persons << p
               check = false
             end
@@ -175,13 +182,13 @@ class Game
           end
         end
       end
-      puts run_persons.to_s
+      #puts run_persons.to_s
       if(run_persons.length == 1)
         return run_persons[0]
       elsif (run_persons.length > 0)
         runcheckvals = []
         (0...run_persons.length).each do |x|
-          runcheckvals << valuesoriginal[run_persons[x]]
+          runcheckvals << valuesoriginalip[run_persons[x]]
         end
         win = compare_values(runcheckvals)
         (0...valuesoriginalip.length).each do |x|
